@@ -1,8 +1,14 @@
 export enum MetadataKey {
-    Message = 674,
+    Message = 674
 }
 
 export enum DatumParameterKey {
+    // Temp Spectrum
+    LqBound = 'LqBound',
+    StakeAdminPolicy = 'StakeAdminPolicy',
+    LpTokenAssetName = 'LpTokenAssetName',
+    LpTokenPolicyId = 'LpTokenPolicyId',
+
     /**
      * Generics.
      */
@@ -53,7 +59,7 @@ export enum DatumParameterKey {
     PoolAssetBBarFee = 'PoolAssetBBarFee',
     RootKLast = 'RootKLast',
     LastInteraction = 'LastInteraction',
-    RequestScriptHash = 'RequestScriptHash',
+    RequestScriptHash = 'RequestScriptHash'
 }
 
 export enum TransactionStatus {
@@ -61,11 +67,11 @@ export enum TransactionStatus {
     Signing,
     Submitting,
     Submitted,
-    Errored,
+    Errored
 }
 
 export enum AddressType {
     Contract,
     Base,
-    Enterprise,
+    Enterprise
 }

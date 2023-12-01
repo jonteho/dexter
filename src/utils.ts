@@ -11,11 +11,11 @@ export function tokensMatch(tokenA: Token, tokenB: Token): boolean {
 export function correspondingReserves(liquidityPool: LiquidityPool, token: Token): bigint[] {
     return tokensMatch(token, liquidityPool.assetA)
         ? [liquidityPool.reserveA, liquidityPool.reserveB]
-        : [liquidityPool.reserveB, liquidityPool.reserveA]
+        : [liquidityPool.reserveB, liquidityPool.reserveA];
 }
 
-export function appendSlash(value?: string) {
-    if (! value) return;
+export function appendSlash(value?: string): string | undefined {
+    if (!value) return '';
     if (value.endsWith('/')) return;
 
     return `${value}/`;

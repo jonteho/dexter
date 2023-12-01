@@ -4,6 +4,7 @@ import { Minswap } from '@dex/minswap';
 import { SundaeSwap } from '@dex/sundaeswap';
 import { MuesliSwap } from '@dex/muesliswap';
 import { WingRiders } from '@dex/wingriders';
+import { Spectrum } from './dex/spectrum';
 import { SwapRequest } from '@requests/swap-request';
 import { BaseWalletProvider } from '@providers/wallet/base-wallet-provider';
 import { BaseDex } from '@dex/base-dex';
@@ -12,12 +13,11 @@ import { BaseMetadataProvider } from '@providers/asset-metadata/base-metadata-pr
 import { TokenRegistryProvider } from '@providers/asset-metadata/token-registry-provider';
 import { CancelSwapRequest } from '@requests/cancel-swap-request';
 import { FetchRequest } from '@requests/fetch-request';
-import axios from "axios";
-import axiosRetry from "axios-retry";
+import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import { SplitSwapRequest } from '@requests/split-swap-request';
 
 export class Dexter {
-
     public config: DexterConfig;
     public requestConfig: RequestConfig;
 
@@ -34,18 +34,18 @@ export class Dexter {
                 shouldFetchMetadata: true,
                 shouldFallbackToApi: true,
                 shouldSubmitOrders: false,
-                metadataMsgBranding: 'Dexter',
+                metadataMsgBranding: 'Dexter'
             } as DexterConfig,
-            config,
+            config
         );
         this.requestConfig = Object.assign(
             {},
             {
                 timeout: 5000,
                 proxyUrl: '',
-                retries: 3,
+                retries: 3
             } as RequestConfig,
-            requestConfig,
+            requestConfig
         );
 
         // Axios configurations
@@ -59,6 +59,7 @@ export class Dexter {
             [MuesliSwap.identifier]: new MuesliSwap(this.requestConfig),
             [WingRiders.identifier]: new WingRiders(this.requestConfig),
             [VyFinance.identifier]: new VyFinance(this.requestConfig),
+            [Spectrum.identifier]: new Spectrum(this.requestConfig)
         };
     }
 
@@ -121,14 +122,13 @@ export class Dexter {
      * New request for cancelling a swap order.
      */
     public newCancelSwapRequest(): CancelSwapRequest {
-        if (! this.walletProvider) {
+        if (!this.walletProvider) {
             throw new Error('Wallet provider must be set before requesting a cancel order.');
         }
-        if (! this.walletProvider.isWalletLoaded) {
+        if (!this.walletProvider.isWalletLoaded) {
             throw new Error('Wallet must be loaded before requesting a cancel order.');
         }
 
         return new CancelSwapRequest(this);
     }
-
 }
