@@ -1,7 +1,6 @@
 import { Asset, Token } from './asset';
 
 export class LiquidityPool {
-
     dex: string;
     assetA: Token;
     assetB: Token;
@@ -12,12 +11,22 @@ export class LiquidityPool {
     limitOrderAddress: string;
 
     lpToken: Asset;
+    poolNft: Asset;
     identifier: string = '';
     poolFeePercent: number = 0;
     totalLpTokens: bigint = 0n;
     extra: any = {};
 
-    constructor(dex: string, assetA: Token, assetB: Token, reserveA: bigint, reserveB: bigint, address: string, marketOrderAddress: string = '', limitOrderAddress: string = '') {
+    constructor(
+        dex: string,
+        assetA: Token,
+        assetB: Token,
+        reserveA: bigint,
+        reserveB: bigint,
+        address: string,
+        marketOrderAddress: string = '',
+        limitOrderAddress: string = ''
+    ) {
         this.dex = dex;
         this.assetA = assetA;
         this.assetB = assetB;
@@ -43,8 +52,8 @@ export class LiquidityPool {
         const assetADecimals: number = this.assetA === 'lovelace' ? 6 : this.assetA.decimals;
         const assetBDecimals: number = this.assetB === 'lovelace' ? 6 : this.assetB.decimals;
 
-        const adjustedReserveA: number = Number(this.reserveA) / (10**assetADecimals);
-        const adjustedReserveB: number = Number(this.reserveB) / (10**assetBDecimals);
+        const adjustedReserveA: number = Number(this.reserveA) / 10 ** assetADecimals;
+        const adjustedReserveB: number = Number(this.reserveB) / 10 ** assetBDecimals;
 
         return adjustedReserveA / adjustedReserveB;
     }
@@ -54,10 +63,9 @@ export class LiquidityPool {
         const assetBDecimals: number = this.assetB === 'lovelace' ? 6 : this.assetB.decimals;
 
         if (this.assetA === 'lovelace') {
-            return (Number(this.reserveA) / 10**assetADecimals) + ((Number(this.reserveB) / 10**assetBDecimals) * this.price);
+            return Number(this.reserveA) / 10 ** assetADecimals + (Number(this.reserveB) / 10 ** assetBDecimals) * this.price;
         }
 
-        return ((Number(this.reserveA) / 10**assetADecimals) * this.price) * ((Number(this.reserveB) / 10**assetBDecimals) * (1 / this.price));
+        return (Number(this.reserveA) / 10 ** assetADecimals) * this.price * ((Number(this.reserveB) / 10 ** assetBDecimals) * (1 / this.price));
     }
-
 }

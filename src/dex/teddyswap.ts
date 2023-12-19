@@ -6,32 +6,44 @@ import { AssetBalance, DatumParameters, DefinitionConstr, DefinitionField, PayTo
 import { DefinitionBuilder } from '@app/definition-builder';
 import { AddressType, DatumParameterKey } from '@app/constants';
 import { BaseApi } from '@dex/api/base-api';
-import pool from './definitions/spectrum/pool';
-import order from './definitions/spectrum/order';
+import pool from './definitions/teddyswap/pool';
+import order from './definitions/teddyswap/order';
 import { correspondingReserves, tokensMatch } from '@app/utils';
-import { SpectrumApi } from '@dex/api/spectrum-api';
+import { TeddyswapApi } from '@dex/api/teddyswap-api';
 
 const MAX_INT: bigint = 9_223_372_036_854_775_807n;
 
-export class Spectrum extends BaseDex {
-    public static readonly identifier: string = 'Spectrum';
+export class TeddySwap extends BaseDex {
+    public static readonly identifier: string = 'TeddySwap';
     public readonly api: BaseApi;
 
     /**
      * On-Chain constants.
      */
-    public readonly orderAddress: string = 'addr1wynp362vmvr8jtc946d3a3utqgclfdl5y9d3kn849e359hsskr20n';
+    public readonly orderAddress: string = 'addr1z99tz7hungv6furtdl3zn72sree86wtghlcr4jc637r2eadkp2avt5gp297dnxhxcmy6kkptepsr5pa409qa7gf8stzs0706a3';
 
     constructor(requestConfig: RequestConfig = {}) {
         super();
 
-        this.api = new SpectrumApi(this, requestConfig);
+        this.api = new TeddyswapApi(this, requestConfig);
     }
 
     public async liquidityPoolAddresses(provider: BaseDataProvider): Promise<string[]> {
         return Promise.resolve([
-            'addr1x94ec3t25egvhqy2n265xfhq882jxhkknurfe9ny4rl9k6dj764lvrxdayh2ux30fl0ktuh27csgmpevdu89jlxppvrst84slu',
-            'addr1x8nz307k3sr60gu0e47cmajssy4fmld7u493a4xztjrll0aj764lvrxdayh2ux30fl0ktuh27csgmpevdu89jlxppvrswgxsta'
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zp5hu6t748dfdd6cxlxxssyqez4wqwcrq44crfgkltqh2cqcwcjyr',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zqgdzhkv23nm3v7tanurzu8v5vll365n7hq8f26937hatlqnv5cpz',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8z8rxrld450e6c360mu72ru7u8zz0602px3esxykcx87f9ns2tytsd',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zz6mve63ntrqp7yxgkk395rngtzdmzdjzzuzdkdks0afwqsmdsegq',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zr0vp2360e2j2gve54sxsheawjd6s6we2d25xl96a3r0jdqzvyqkl',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zzlsgmhduch9juwcjf6vjqeht0jv2g2mlz86wqh42h8akdqglnguu',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zxk96389hhwyhv0t07gh89wqnaqg9cqkwsz4esd9sm562rs55tl66',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8z9re630pc4dzmhtku8276tyq0glgn53h93vw5rl9e6w4g8su86xvk',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zpczswng09euafg44jclrg5tm7xg260qzyavu9dysz8g3js7pzqla',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8z92v2k4gz85r5rq035n2llzemqvcz70h7hdr3njur05y6nsmrsjpe',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zxn5qy8sn2d7wtdtvjcsv7v0h7u9zsleljxv3nschr5sj3sla73t7',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zzw03em2wpuy6t66rx4hqmggelr8r2whwru8uuptxzwdlfsss26rc',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zphr7r6v67asj5jc5w5uapfapv0u9433m3v9aag9w46spaqc60ygw',
+            'addr1zy5th50h46anh3v7zdvh7ve6amac7k4h3mdfvt0p6czm8zrlxa5g3cwp6thfvzwhd9s4vcjjdwttsss65l09dum7g9rs0mr8px'
         ]);
     }
 
@@ -65,7 +77,7 @@ export class Spectrum extends BaseDex {
             return (
                 !assetName?.toLowerCase()?.endsWith('_nft') &&
                 !assetName?.toLowerCase()?.endsWith('_identity') &&
-                !assetName?.toLowerCase()?.endsWith('_lq')
+                !assetName?.toLowerCase()?.endsWith('_lp')
             );
         });
 
@@ -79,7 +91,7 @@ export class Spectrum extends BaseDex {
         const assetBIndex: number = relevantAssets.length === 2 ? 1 : 2;
 
         const liquidityPool: LiquidityPool = new LiquidityPool(
-            Spectrum.identifier,
+            TeddySwap.identifier,
             relevantAssets[assetAIndex].asset,
             relevantAssets[assetBIndex].asset,
             relevantAssets[assetAIndex].quantity,
@@ -106,7 +118,7 @@ export class Spectrum extends BaseDex {
                 );
             });
             const nftToken: Asset | undefined = utxo.assetBalances.find((assetBalance) => {
-                return (assetBalance.asset as Asset).assetName?.toLowerCase()?.endsWith('_nft');
+                return (assetBalance.asset as Asset).assetName?.toLowerCase()?.endsWith('_identity');
             })?.asset as Asset | undefined;
 
             if (!lpTokenBalance || !nftToken) {
