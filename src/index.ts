@@ -43,3 +43,5 @@ export * from './dex/sundaeswap';
 export * from './dex/muesliswap';
 export * from './dex/wingriders';
 export * from './dex/vyfinance';
+export * from './dex/teddyswap';
+export * from './dex/spectrum';

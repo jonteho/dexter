@@ -2,6 +2,10 @@
 
 All notable changes to Dexter will be documented in this file.
 
+## [v5.0.0]
+- TeddySwap integration
+- Spectrum integration
+
 ## [v4.2.0]
 - Fix WR price impact formula for 0 decimals
 - Rename Asset identifier function

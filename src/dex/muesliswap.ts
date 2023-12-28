@@ -145,7 +145,7 @@ export class MuesliSwap extends BaseDex {
     estimatedReceive(liquidityPool: LiquidityPool, swapInToken: Token, swapInAmount: bigint): bigint {
         const [reserveIn, reserveOut]: bigint[] = correspondingReserves(liquidityPool, swapInToken);
 
-        const swapFee: bigint = ((swapInAmount * BigInt(liquidityPool.poolFeePercent * 100)) + BigInt(10000) - 1n) / 10000n;
+        const swapFee: bigint = ((swapInAmount * BigInt(Math.floor(liquidityPool.poolFeePercent * 100))) + BigInt(10000) - 1n) / 10000n;
         const adjustedSwapInAmount: bigint = swapInAmount - swapFee;
 
         const estimatedReceive: number = Number(reserveOut) - (Number(reserveIn) * Number(reserveOut)) / (Number(reserveIn) + Number(adjustedSwapInAmount));
@@ -202,6 +202,7 @@ export class MuesliSwap extends BaseDex {
                         },
                     ],
                     datum: datumBuilder.getCbor(),
+                    isInlineDatum: false,
                     spendUtxos: spendUtxos,
                 }
             )
@@ -222,6 +223,7 @@ export class MuesliSwap extends BaseDex {
                 address: returnAddress,
                 addressType: AddressType.Base,
                 assetBalances: relevantUtxo.assetBalances,
+                isInlineDatum: false,
                 spendUtxos: [relevantUtxo],
             }
         ];

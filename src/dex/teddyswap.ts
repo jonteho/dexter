@@ -161,59 +161,58 @@ export class TeddySwap extends BaseDex {
     }
 
     public async buildSwapOrder(liquidityPool: LiquidityPool, swapParameters: DatumParameters, spendUtxos: UTxO[] = []): Promise<PayToAddress[]> {
-        throw new Error('Not implemented');
-        // const batcherFee: SwapFee | undefined = this.swapOrderFees().find((fee: SwapFee) => fee.id === 'batcherFee');
-        // const deposit: SwapFee | undefined = this.swapOrderFees().find((fee: SwapFee) => fee.id === 'deposit');
-        // const minReceive = swapParameters.MinReceive as bigint;
+        const batcherFee: SwapFee | undefined = this.swapOrderFees().find((fee: SwapFee) => fee.id === 'batcherFee');
+        const deposit: SwapFee | undefined = this.swapOrderFees().find((fee: SwapFee) => fee.id === 'deposit');
+        const minReceive = swapParameters.MinReceive as bigint;
 
-        // if (!batcherFee || !deposit || !minReceive) {
-        //     return Promise.reject('Parameters for datum are not set.');
-        // }
-        // if (!liquidityPool.poolNft) {
-        //     return Promise.reject('Pool NFT is required.');
-        // }
+        if (!batcherFee || !deposit || !minReceive) {
+            return Promise.reject('Parameters for datum are not set.');
+        }
+        if (!liquidityPool.poolNft) {
+            return Promise.reject('Pool NFT is required.');
+        }
 
-        // const decimalToFractionalImproved = (decimalValue: bigint | number): [bigint, bigint] => {
-        //     const [whole, decimals = ''] = decimalValue.toString()?.split('.');
-        //     let truncatedDecimals = decimals.slice(0, 15);
-        //     const denominator: bigint = BigInt(10 ** truncatedDecimals.length);
-        //     const numerator = BigInt(whole) * denominator + BigInt(decimals);
-        //     return [numerator, denominator];
-        // };
+        const decimalToFractionalImproved = (decimalValue: bigint | number): [bigint, bigint] => {
+            const [whole, decimals = ''] = decimalValue.toString()?.split('.');
+            let truncatedDecimals = decimals.slice(0, 15);
+            const denominator: bigint = BigInt(10 ** truncatedDecimals.length);
+            const numerator = BigInt(whole) * denominator + BigInt(decimals);
+            return [numerator, denominator];
+        };
 
-        // const batcherFeeForToken = Number(batcherFee.value) / Number(minReceive);
-        // const [numerator, denominator] = decimalToFractionalImproved(batcherFeeForToken);
-        // const lpfee: bigint = BigInt(1000 - Math.floor(liquidityPool.poolFeePercent * 10));
+        const batcherFeeForToken = Number(batcherFee.value) / Number(minReceive);
+        const [numerator, denominator] = decimalToFractionalImproved(batcherFeeForToken);
+        const lpfee: bigint = BigInt(1000 - Math.floor(liquidityPool.poolFeePercent * 10));
 
-        // swapParameters = {
-        //     ...swapParameters,
-        //     [DatumParameterKey.TokenPolicyId]: liquidityPool.poolNft.policyId,
-        //     [DatumParameterKey.TokenAssetName]: liquidityPool.poolNft.nameHex,
-        //     [DatumParameterKey.LpFee]: lpfee,
-        //     [DatumParameterKey.LpFeeNumerator]: numerator,
-        //     [DatumParameterKey.LpFeeDenominator]: denominator
-        // };
+        swapParameters = {
+            ...swapParameters,
+            [DatumParameterKey.TokenPolicyId]: liquidityPool.poolNft.policyId,
+            [DatumParameterKey.TokenAssetName]: liquidityPool.poolNft.nameHex,
+            [DatumParameterKey.LpFee]: lpfee,
+            [DatumParameterKey.LpFeeNumerator]: numerator,
+            [DatumParameterKey.LpFeeDenominator]: denominator
+        };
 
-        // const datumBuilder: DefinitionBuilder = new DefinitionBuilder();
-        // await datumBuilder.loadDefinition(order).then((builder: DefinitionBuilder) => {
-        //     builder.pushParameters(swapParameters);
-        // });
+        const datumBuilder: DefinitionBuilder = new DefinitionBuilder();
+        await datumBuilder.loadDefinition(order).then((builder: DefinitionBuilder) => {
+            builder.pushParameters(swapParameters);
+        });
 
-        // return [
-        //     this.buildSwapOrderPayment(swapParameters, {
-        //         address: this.orderAddress,
-        //         addressType: AddressType.Contract,
-        //         assetBalances: [
-        //             {
-        //                 asset: 'lovelace',
-        //                 quantity: batcherFee?.value + deposit.value
-        //             }
-        //         ],
-        //         datum: datumBuilder.getCbor(),
-        //         isInlineDatum: true,
-        //         spendUtxos: spendUtxos
-        //     })
-        // ];
+        return [
+            this.buildSwapOrderPayment(swapParameters, {
+                address: this.orderAddress,
+                addressType: AddressType.Contract,
+                assetBalances: [
+                    {
+                        asset: 'lovelace',
+                        quantity: batcherFee?.value + deposit.value
+                    }
+                ],
+                datum: datumBuilder.getCbor(),
+                isInlineDatum: true,
+                spendUtxos: spendUtxos
+            })
+        ];
     }
 
     public buildCancelSwapOrder(txOutputs: UTxO[], returnAddress: string): Promise<PayToAddress[]> {

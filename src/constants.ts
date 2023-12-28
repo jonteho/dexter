@@ -4,10 +4,10 @@ export enum MetadataKey {
 
 export enum DatumParameterKey {
     // Temp Spectrum
-    LqBound = 'LqBound',
-    StakeAdminPolicy = 'StakeAdminPolicy',
-    LpTokenAssetName = 'LpTokenAssetName',
-    LpTokenPolicyId = 'LpTokenPolicyId',
+    // LqBound = 'LqBound',
+    // StakeAdminPolicy = 'StakeAdminPolicy',
+    // LpTokenAssetName = 'LpTokenAssetName',
+    // LpTokenPolicyId = 'LpTokenPolicyId',
 
     /**
      * Generics.
@@ -46,6 +46,8 @@ export enum DatumParameterKey {
      */
     PoolIdentifier = 'PoolIdentifier',
     TotalLpTokens = 'TotalLpTokens',
+    LpTokenPolicyId = 'LpTokenPolicyId',
+    LpTokenAssetName = 'LpTokenAssetName',
     LpFee = 'LpFee',
     LpFeeNumerator = 'LpFeeNumerator',
     LpFeeDenominator = 'LpFeeDenominator',
@@ -59,7 +61,9 @@ export enum DatumParameterKey {
     PoolAssetBBarFee = 'PoolAssetBBarFee',
     RootKLast = 'RootKLast',
     LastInteraction = 'LastInteraction',
-    RequestScriptHash = 'RequestScriptHash'
+    RequestScriptHash = 'RequestScriptHash',
+    StakeAdminPolicy = 'StakeAdminPolicy',
+    LqBound = 'LqBound'
 }
 
 export enum TransactionStatus {
