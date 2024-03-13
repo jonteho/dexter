@@ -17,6 +17,7 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { SplitSwapRequest } from '@requests/split-swap-request';
 import { TeddySwap } from '@dex/teddyswap';
+import { SplitCancelSwapRequest } from '@requests/split-cancel-swap-request';
 
 export class Dexter {
     public config: DexterConfig;
@@ -133,4 +134,5 @@ export class Dexter {
 
         return new CancelSwapRequest(this);
     }
+
 }
