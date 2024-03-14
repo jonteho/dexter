@@ -3,12 +3,6 @@ export enum MetadataKey {
 }
 
 export enum DatumParameterKey {
-    // Temp Spectrum
-    // LqBound = 'LqBound',
-    // StakeAdminPolicy = 'StakeAdminPolicy',
-    // LpTokenAssetName = 'LpTokenAssetName',
-    // LpTokenPolicyId = 'LpTokenPolicyId',
-
     /**
      * Generics.
      */
